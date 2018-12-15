@@ -1,1 +1,11 @@
-Part 2 of this [tutorial](https://medium.com/p/145e7b2fe8f2/).
+install
+```
+git clone git@github.com:asnikitin/app-store-tutorial.git
+cd app-store-tutorial
+yarn
+```
+
+run
+```
+yarn start
+```

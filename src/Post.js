@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { routeNodeSelector } from 'redux-router5';
 import CSSTransition from 'react-transition-group/CSSTransition';
 
 import { chain, composite, delay, spring, styler, tween } from 'popmotion';
@@ -35,7 +34,7 @@ class Post extends PureComponent {
   };
 
   onEnter = () => {
-    const { post } = this.props.route.data;
+    const { post } = this.props;
 
     this.preview = document.querySelector(`.preview[data-id="${post.id}"]`);
     this.pageList = document.querySelector('.page-list');
@@ -133,10 +132,10 @@ class Post extends PureComponent {
     // This happens when loading the Post directly without
     // going through the list page first.
 
-    const { in: inProp } = this.props;
+    const { in: inProp, post } = this.props;
 
     if (inProp) {
-      const { image } = this.props.route.data.post;
+      const { image } = post;
 
       const img = new Image();
       img.src = `/img/${image}`;
@@ -153,27 +152,21 @@ class Post extends PureComponent {
 
   render() {
     const {
-      navigateTo,
-      route,
       dispatch,
-      previousRoute,
+      post,
       ...transitionProps
     } = this.props;
-
-    const { post } = route.data;
     const { title, image, content } = post;
 
     return (
-      <CSSTransition
-        {...transitionProps}
+      <CSSTransition {...transitionProps}
         onEnter={this.onEnter}
         onExit={this.onExit}
         addEndListener={this.onAddEndListener}
-        classNames="post"
-      >
+        classNames="post">
         <div className="page full-width page-post">
           <div ref={post => (this.post = post)} className="post full-width">
-            <div className="close" onClick={() => navigateTo('home')} />
+            <div className="close" onClick={() => dispatch({ type: 'Toggle' })} />
             <div className="cover-wrapper">
               <div
                 className="cover"
@@ -189,4 +182,6 @@ class Post extends PureComponent {
   }
 }
 
-export default connect(state => routeNodeSelector('post'))(Post);
+export default connect(({ data: { currentPost, posts } }) => ({
+  post: posts[currentPost - 1],
+}))(Post);

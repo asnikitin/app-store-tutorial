@@ -1,15 +1,12 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { routeNodeSelector } from 'redux-router5';
-
 import Preview from './Preview';
 
 import './List.css';
 
 class List extends PureComponent {
   render() {
-    const { route, navigateTo } = this.props;
-    const { posts } = route.data;
+    const { posts, dispatch } = this.props;
 
     return (
       <div className="page full-width page-list">
@@ -19,7 +16,7 @@ class List extends PureComponent {
               key={id}
               id={id}
               {...rest}
-              onClick={() => navigateTo('post', { id })}
+              onClick={() => dispatch({ type: 'Post', payload: id })}
             />
           ))}
         </div>
@@ -28,4 +25,6 @@ class List extends PureComponent {
   }
 }
 
-export default connect(state => routeNodeSelector('home'))(List);
+export default connect(state => ({
+  posts: state.data.posts,
+}))(List);

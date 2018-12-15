@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
-import { router5Reducer } from 'redux-router5';
+
+import dataReducer from './data';
 
 export default combineReducers({
-  router: router5Reducer
+  data: dataReducer,
 });
